@@ -1,0 +1,73 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+	<script>
+		
+		let
+		jsonObject;
+		
+	</script>
+
+
+	<div id="getaccount" class="container">
+		<form id="contact" action="" method="get">
+			<h3>Get Account Form</h3>
+			<h4>Please add all the required fields</h4>
+			<fieldset>
+				<input placeholder="Your Account Number" name="accountnumber"
+					type="text" tabindex="1" required autofocus>
+			</fieldset>
+
+			<fieldset>
+				<button type="button" name="submit" id="get-submit"
+					onclick="loadDoc(accountnumber.value)">Get Account Details</button>
+			</fieldset>
+		</form>
+	</div>
+
+	<div id="tablebackground" class="table">
+			<h3 id= result> No Customer data yet!</h3>
+	</div>
+
+	<script>
+		function loadDoc(accountnumber) {
+			
+			var http = new XMLHttpRequest();
+			var url = "getdata";
+			var params = "accountnumber=" + accountnumber;
+			http.open("GET", url + "?" + params, true);
+			http.onreadystatechange = function() {//Call a function when the state changes.
+				if (http.readyState == 4 && http.status == 200) {
+					alert(http.responseText);
+
+					this.jsonObject = JSON.parse(http.responseText);
+
+					// Creating a table
+					var tableInitial = "<h3>Customer details</h3><table><tr><th>Account Number</th><th>Name</th><th>Date of birth</th>"+
+							"<th>Address </th><th>PAN </th> <th>Adhar Number </th><th>Money </th></tr>"; 
+
+					var customer = "<td>"+ this.jsonObject.customerAccno+"</td>"
+									+"<td>"+ this.jsonObject.customerName+"</td>"
+									+"<td>"+ this.jsonObject.customerDOB+"</td>"
+									+"<td>"+ this.jsonObject.customerAddress+"</td>"
+									+"<td>"+ this.jsonObject.customerPAN+"</td>"
+									+"<td>"+ this.jsonObject.customerAdhar+"</td>"
+									+"<td>"+ this.jsonObject.money+"</td>";
+									
+					var tableEnd = "</table>"
+					document.getElementById("result").innerHTML = tableInitial+ customer+tableEnd;
+				}
+			}
+			http.send(null);
+
+		}
+	</script>
+
+
+
+</body>
+</html>
